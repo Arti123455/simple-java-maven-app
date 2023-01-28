@@ -1,9 +1,7 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
+    agent any
+    tools{
+        maven 'Maven'
     }
     stages {
         stage('Build') {
@@ -21,9 +19,9 @@ pipeline {
                 }
             }
         }
-        stage('Deliver') {
+        stage('Deploy on Server') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'deploy adapters: [tomcat8(credentialsId: 'credtomcat', path: '', url: 'http://54.159.195.182:8090')], contextPath: '/time-tracker', war: '**/*.war'
             }
         }
     }
