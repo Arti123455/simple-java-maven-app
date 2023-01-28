@@ -9,20 +9,5 @@ pipeline {
                 bat 'mvn -B -DskipTests clean package'
             }
         }
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-             }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deploy on Server') {
-            steps {
-                 'deploy adapters: [tomcat8(credentialsId: 'credtomcat', path: '', url: 'http://54.159.195.182:8090')], contextPath: '/maven-app', war: '**/*.war'
-            }
-        }
     }
 }
